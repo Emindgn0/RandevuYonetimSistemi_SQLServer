@@ -19,12 +19,15 @@
     #loadingSpinner { display: none; }
     .valid-feedback, .invalid-feedback { display: none; margin-top: 0.25rem; font-size: 0.875em; }
     .is-valid ~ .valid-feedback, .is-invalid ~ .invalid-feedback { display: block; }
-    .valid-icon { color: #28a745; margin-left: 5px; display: none; }
-    .is-valid ~ .valid-icon { display: inline-block; }
+    .valid-icon { color: #28a745; margin-left: 5px; display: none; transition: transform 0.3s ease, opacity 0.3s ease; }
+    .is-valid ~ .valid-icon { display: inline-block; animation: tickAnimation 0.3s ease-in-out; }
     .input-group-text { background-color: transparent; }
     #message { transition: all 0.3s ease; }
     .loading-placeholder::after { content: '...'; animation: dots 1.5s steps(5, end) infinite; }
     @keyframes dots { 0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); } 40% { color: #6c757d; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); } 60% { text-shadow: .25em 0 0 #6c757d, .5em 0 0 rgba(0,0,0,0); } 80%, 100% { text-shadow: .25em 0 0 #6c757d, .5em 0 0 #6c757d; } }
+    .form-control.is-valid { border-color: #28a745; background-image: none; }
+    .form-control.is-invalid { border-color: #dc3545; background-image: none; }
+    @keyframes tickAnimation { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.2); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
   </style>
 </head>
 <body>
@@ -45,13 +48,13 @@
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="ad" class="form-label">Ad</label>
-                    <input type="text" class="form-control" id="ad" name="ad" maxlength="50" required>
+                    <input type="text" class="form-control" id="ad" name="ad" maxlength="50" autocomplete="off" placeholder="Adınız" required>
                     <div class="valid-feedback">Geçerli!</div>
                     <div class="invalid-feedback">Lütfen adınızı giriniz.</div>
                   </div>
                   <div class="col-md-6 mb-3">
                     <label for="soyad" class="form-label">Soyad</label>
-                    <input type="text" class="form-control" id="soyad" name="soyad" maxlength="50" required>
+                    <input type="text" class="form-control" id="soyad" name="soyad" maxlength="50" autocomplete="off" placeholder="Soyadınız" required>
                     <div class="valid-feedback">Geçerli!</div>
                     <div class="invalid-feedback">Lütfen soyadınızı giriniz.</div>
                   </div>
@@ -62,7 +65,7 @@
                     <label for="tc" class="form-label">TC Kimlik No</label>
                     <div class="input-group">
                       <input type="text" class="form-control" id="tc" name="tc" maxlength="11" 
-                             pattern="[0-9]{11}" title="11 haneli TC kimlik numarası" required>
+                             pattern="[0-9]{11}" title="11 haneli TC kimlik numarası" autocomplete="off" placeholder="T.C. Kimlik Numaranız" required>
                       <span class="input-group-text valid-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                           <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
@@ -75,8 +78,9 @@
                   <div class="col-md-6 mb-3">
                     <label for="tel" class="form-label">Telefon</label>
                     <div class="input-group">
-                      <input type="tel" class="form-control" id="tel" name="tel" 
-                             maxlength="10" pattern="[0-9]{10}" title="10 haneli telefon numarası" required>
+                     <input type="tel" class="form-control" id="tel" name="tel"
+                        maxlength="10" pattern="5[0-9]{9}" 
+                        title="5 ile başlayan 10 haneli telefon numarası giriniz" placeholder="5XX XXX XX XX" autocomplete="off" required>
                       <span class="input-group-text valid-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                           <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
@@ -84,24 +88,24 @@
                       </span>
                     </div>
                     <div class="valid-feedback">Telefon numarası geçerli!</div>
-                    <div class="invalid-feedback">Lütfen 10 haneli telefon numarası giriniz (örn: 5551234567).</div>
+                    <div class="invalid-feedback">Lütfen 10 haneli telefon numarası giriniz.</div>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label for="cinsiyet" class="form-label">Cinsiyet</label>
-                    <select class="form-select" id="cinsiyet" name="cinsiyet" required>
-                      <option value="">Seçiniz</option>
-                      <option value="E">Erkek</option>
-                      <option value="K">Kadın</option>
-                    </select>
-                    <div class="invalid-feedback">Lütfen cinsiyetinizi seçiniz.</div>
-                  </div>
-                  <div class="col-md-6 mb-3">
                     <label for="dogumTarihi" class="form-label">Doğum Tarihi</label>
                     <input type="date" class="form-control" id="dogumTarihi" name="dogumTarihi" required>
                     <div class="invalid-feedback">Lütfen doğum tarihinizi giriniz.</div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="cinsiyet" class="form-label">Cinsiyet</label>
+                    <select class="form-select" id="cinsiyet" name="cinsiyet" required>
+                      <option value="">Cinsiyet seçiniz</option>
+                      <option value="E">Erkek</option>
+                      <option value="K">Kadın</option>
+                    </select>
+                    <div class="invalid-feedback">Lütfen cinsiyet seçiniz.</div>
                   </div>
                 </div>
               </div>
@@ -124,7 +128,6 @@
                   </select>
                   <div class="invalid-feedback">Lütfen bir poliklinik seçiniz.</div>
                 </div>
-                <ul id="poliklinik-list" class="list-group mt-2"></ul>
               </div>
 
               <!-- Doktor Seçimi -->
@@ -155,7 +158,7 @@
               
               <!-- Gönder Butonu -->
               <div class="d-grid mt-4">
-                <button type="submit" class="btn btn-primary btn-lg">
+                <button type="submit" id="submitButton" class="btn btn-primary btn-lg" disabled>
                   <span id="submitText">Randevu Oluştur</span>
                   <span id="loadingSpinner" class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
                 </button>
@@ -172,69 +175,91 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    const apiBaseUrl = 'http://localhost:5000';
+    const apiBaseUrl = 'http://localhost:5500';
 
-    // TC Kimlik No doğrulama fonksiyonu
+    // TC Kimlik No doğrulama fonksiyonu (sadece 11 haneli sayı kontrolü)
     function validateTC(tc) {
-      if (!/^\d{11}$/.test(tc)) return false;
-      let digits = tc.split('').map(Number);
-      let oddSum = digits[0] + digits[2] + digits[4] + digits[6] + digits[8];
-      let evenSum = digits[1] + digits[3] + digits[5] + digits[7];
-      let checkDigit1 = (oddSum * 7 - evenSum) % 10;
-      let checkDigit2 = (oddSum + evenSum + digits[9]) % 10;
-      return checkDigit1 === digits[9] && checkDigit2 === digits[10];
+      if (!tc || typeof tc !== 'string') {
+        console.error('TC değeri geçersiz veya undefined:', tc);
+        return false;
+      }
+      return /^\d{11}$/.test(tc);
     }
 
     document.addEventListener('DOMContentLoaded', function() {
       // Bugünün tarihini ayarla ve geçmiş tarihleri engelle
       const today = new Date().toISOString().split('T')[0];
       document.getElementById('tarih').min = today;
-      
-      // Doğum tarihi için maksimum bugün
       document.getElementById('dogumTarihi').max = today;
       
-      // Değişkenler
       let selectedDoctor = null;
       let selectedTime = null;
+      let selectedPoliklinik = null;
       
-      // Hastaneleri yükle
-      async function loadHospitals() {
-        try {
-          const response = await fetch(`${apiBaseUrl}/api/hastaneler`, { signal: AbortSignal.timeout(10000) });
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Hastaneler yüklenemedi');
-          }
-          
-          const hastaneler = await response.json();
-          const select = document.getElementById('hastane');
-          select.innerHTML = '<option value="">Hastane seçiniz</option>';
-          
-          hastaneler.forEach(h => {
-            const option = document.createElement('option');
-            option.value = h.HastaneID;
-            option.textContent = h.HAdi;
-            select.appendChild(option);
-          });
-        } catch (error) {
-          console.error('Hastaneler yüklenemedi:', error);
-          showMessage(`Hastaneler yüklenirken bir hata oluştu: ${error.message}`, 'error');
+      function updateSubmitButton() {
+        const tarih = document.getElementById('tarih').value;
+        const submitButton = document.querySelector('#submitButton');
+        if (submitButton) {
+          submitButton.disabled = !(tarih && selectedTime && selectedDoctor && selectedPoliklinik);
         }
       }
       
-      // Poliklinikleri yükle
+      async function loadHospitals() {
+        try {
+          console.log('Hastaneler yükleniyor, URL:', `${apiBaseUrl}/api/hastaneler`);
+          const response = await fetch(`${apiBaseUrl}/api/hastaneler`, { 
+            signal: AbortSignal.timeout(15000)
+          });
+          
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `Hastaneler yüklenemedi: ${response.status}`);
+          }
+          
+          const hastaneler = await response.json();
+          console.log('Hastaneler alındı:', hastaneler);
+          const select = document.getElementById('hastane');
+          
+          if (select) {
+            select.innerHTML = '<option value="">Hastane seçiniz</option>';
+            
+            if (!hastaneler.length) {
+              showMessage('Hiç hastane bulunamadı.', 'warning');
+              return;
+            }
+
+            hastaneler.forEach(h => {
+              const option = document.createElement('option');
+              option.value = h.HastaneID;
+              option.textContent = h.HAdi;
+              select.appendChild(option);
+            });
+          }
+        } catch (error) {
+          console.error('Hastaneler yüklenemedi:', error);
+          showMessage(`Hastaneler yüklenirken bir hata oluştu: ${error.message}`, 'error');
+          const hastaneSelect = document.getElementById('hastane');
+          if (hastaneSelect) {
+            hastaneSelect.innerHTML = '<option value="">Hastaneler yüklenemedi</option>';
+          }
+        }
+      }
+      
       async function loadPolyclinics(hastaneId) {
         if (!hastaneId) {
-          console.error("Hastane ID eksik veya geçersiz.");
+          console.error('Hastane ID eksik.');
           return [];
         }
 
         try {
           toggleLoading(true);
-          const response = await fetch(`${apiBaseUrl}/api/poliklinikler?hastane=${hastaneId}`, { signal: AbortSignal.timeout(10000) });
+          console.log('Poliklinikler yükleniyor, URL:', `${apiBaseUrl}/api/poliklinikler?hastane=${hastaneId}`);
+          const response = await fetch(`${apiBaseUrl}/api/poliklinikler?hastane=${hastaneId}`, { 
+            signal: AbortSignal.timeout(15000)
+          });
           
           if (!response.ok) {
-            const errorData = await response.json();
+            const errorData = await response.json().catch(() => ({}));
             throw new Error(errorData.error || `Poliklinikler yüklenemedi: ${response.status}`);
           }
 
@@ -243,35 +268,24 @@
           toggleLoading(false);
 
           const poliklinikSelect = document.getElementById('poliklinik');
-          poliklinikSelect.innerHTML = '<option value="">Poliklinik seçiniz</option>';
-          poliklinikSelect.disabled = false;
+          if (poliklinikSelect) {
+            poliklinikSelect.innerHTML = '<option value="">Poliklinik seçiniz</option>';
+            poliklinikSelect.disabled = false;
 
-          if (poliklinikler.length === 0) {
-            showMessage('Seçtiğiniz hastanede poliklinik bulunamadı', 'warning');
-            poliklinikSelect.innerHTML = '<option value="">Poliklinik bulunamadı</option>';
-            return [];
-          }
+            if (!poliklinikler.length) {
+              showMessage('Seçtiğiniz hastanede poliklinik bulunamadı.', 'warning');
+              poliklinikSelect.innerHTML = '<option value="">Poliklinik bulunamadı</option>';
+              poliklinikSelect.disabled = true;
+              return [];
+            }
 
-          poliklinikler.forEach(poliklinik => {
-            const option = document.createElement('option');
-            option.value = poliklinik.PID;
-            option.textContent = poliklinik.PAdi;
-            poliklinikSelect.appendChild(option);
-          });
-
-          const poliklinikList = document.getElementById('poliklinik-list');
-          poliklinikList.innerHTML = '';
-          poliklinikler.forEach(poliklinik => {
-            const listItem = document.createElement('li');
-            listItem.className = 'list-group-item';
-            listItem.textContent = poliklinik.PAdi;
-            listItem.style.cursor = 'pointer';
-            listItem.addEventListener('click', () => {
-              poliklinikSelect.value = poliklinik.PID;
-              poliklinikSelect.dispatchEvent(new Event('change'));
+            poliklinikler.forEach(poliklinik => {
+              const option = document.createElement('option');
+              option.value = poliklinik.PID;
+              option.textContent = poliklinik.PAdi;
+              poliklinikSelect.appendChild(option);
             });
-            poliklinikList.appendChild(listItem);
-          });
+          }
 
           return poliklinikler;
         } catch (error) {
@@ -279,61 +293,88 @@
           console.error('Poliklinikler yüklenemedi:', error);
           showMessage(`Poliklinikler yüklenirken bir hata oluştu: ${error.message}`, 'error');
           const poliklinikSelect = document.getElementById('poliklinik');
-          poliklinikSelect.innerHTML = '<option value="">Poliklinikler yüklenemedi</option>';
-          poliklinikSelect.disabled = true;
+          if (poliklinikSelect) {
+            poliklinikSelect.innerHTML = '<option value="">Poliklinikler yüklenemedi</option>';
+            poliklinikSelect.disabled = true;
+          }
           return [];
         }
       }
       
-      // Doktorları yükle
       async function loadDoctors(hastaneId, poliklinikId) {
         if (!hastaneId || !poliklinikId) {
           console.error('Hastane veya poliklinik ID eksik.');
           return [];
         }
-
         try {
-          const response = await fetch(
-            `${apiBaseUrl}/api/doktorlar?hastaneId=${hastaneId}&poliklinikId=${poliklinikId}`,
-            { signal: AbortSignal.timeout(10000) }
-          );
+          console.log('Doktorlar yükleniyor, URL:', `${apiBaseUrl}/api/doktorlar?hastaneId=${hastaneId}&poliklinikId=${poliklinikId}`);
+          const response = await fetch(`${apiBaseUrl}/api/doktorlar?hastaneId=${hastaneId}&poliklinikId=${poliklinikId}`, {
+            signal: AbortSignal.timeout(15000)
+          });
 
           if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Doktorlar yüklenemedi');
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `Doktorlar yüklenemedi: ${response.status}`);
           }
 
           const doktorlar = await response.json();
+          const container = document.getElementById('doctorContainer');
+          container.innerHTML = '';
 
-          if (!doktorlar || doktorlar.length === 0) {
-            showMessage('Seçtiğiniz poliklinikte doktor bulunamadı', 'warning');
+          if (!doktorlar.length) {
+            container.innerHTML = '<p class="text-muted">Bu poliklinikte doktor bulunmamaktadır.</p>';
             return [];
           }
+
+          doktorlar.forEach(doktor => {
+            const card = document.createElement('div');
+            card.className = 'doctor-card';
+            card.textContent = doktor.DAdi + ' ' + doktor.DSoyadi;
+            card.dataset.doktorId = doktor.DoktorID;
+
+            card.addEventListener('click', () => {
+              document.querySelectorAll('.doctor-card').forEach(el => el.classList.remove('selected'));
+              card.classList.add('selected');
+              selectedDoctor = doktor.DoktorID;
+              updateSubmitButton();
+              loadAvailableTimes(selectedDoctor, document.getElementById('tarih').value);
+            });
+
+            container.appendChild(card);
+          });
 
           return doktorlar;
         } catch (error) {
           console.error('Doktorlar yüklenemedi:', error);
           showMessage(`Doktorlar yüklenirken bir hata oluştu: ${error.message}`, 'error');
+          document.getElementById('doctorContainer').innerHTML = '<p class="text-danger">Doktorlar yüklenemedi.</p>';
           return [];
         }
-      }
+      }  
       
-      // Müsait saatleri yükle
-      async function loadAvailableTimeSlots(doctorId, date) {
-        if (!doctorId || !date) return;
+      async function loadAvailableTimeSlots(doctorId, poliklinikId, date) {
+        if (!doctorId || !poliklinikId || !date) {
+          console.error('Eksik parametreler:', {doctorId, poliklinikId, date});
+          showMessage('Randevu bilgileri eksik. Lütfen doktor ve tarih seçiniz.', 'error');
+          return;
+        }
 
         try {
           const container = document.getElementById('timeSlotsContainer');
-          container.innerHTML = '<p class="text-muted loading-placeholder">Müsait saatler yükleniyor</p>';
-
+          if (container) {
+            container.innerHTML = '<p class="text-muted loading-placeholder">Müsait saatler yükleniyor</p>';
+          }
+          
+          console.log('Müsait saatler yükleniyor, URL:', `${apiBaseUrl}/api/musait-saatler?doktorId=${doctorId}&poliklinikId=${poliklinikId}&tarih=${date}`);
+          
           const response = await fetch(
-            `${apiBaseUrl}/api/musait-saatler?doktorId=${doctorId}&tarih=${date}`,
-            { signal: AbortSignal.timeout(10000) }
+            `${apiBaseUrl}/api/musait-saatler?doktorId=${doctorId}&poliklinikId=${poliklinikId}&tarih=${date}`,
+            { signal: AbortSignal.timeout(15000) }
           );
 
           if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Müsait saatler yüklenemedi');
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `Müsait saatler yüklenemedi: ${response.status}`);
           }
 
           const slots = await response.json();
@@ -341,16 +382,20 @@
         } catch (error) {
           console.error('Müsait saatler yüklenemedi:', error);
           showMessage(`Müsait saatler yüklenirken bir hata oluştu: ${error.message}`, 'error');
-          document.getElementById('timeSlotsContainer').innerHTML = '<p class="text-danger">Saatler yüklenemedi</p>';
+          const container = document.getElementById('timeSlotsContainer');
+          if (container) {
+            container.innerHTML = '<p class="text-danger">Saatler yüklenemedi</p>';
+          }
         }
       }
       
-      // Doktorları render et
       function renderDoctors(doctors) {
         const container = document.getElementById('doctorContainer');
+        if (!container) return;
+
         container.innerHTML = '';
 
-        if (doctors.length === 0) {
+        if (!doctors.length) {
           container.innerHTML = '<div class="alert alert-warning">Bu poliklinikte doktor bulunamadı</div>';
           return;
         }
@@ -373,26 +418,29 @@
         document.querySelectorAll('.select-doctor').forEach(btn => {
           btn.addEventListener('click', function() {
             selectedDoctor = this.getAttribute('data-id');
-            document.querySelectorAll('.doctor-card').forEach(c => {
-              c.classList.remove('selected');
-            });
+            selectedPoliklinik = document.getElementById('poliklinik').value;
+            document.querySelectorAll('.doctor-card').forEach(c => c.classList.remove('selected'));
             this.closest('.doctor-card').classList.add('selected');
 
             const selectedDate = document.getElementById('tarih').value;
-            if (selectedDate) {
-              loadAvailableTimeSlots(selectedDoctor, selectedDate);
+            if (selectedDate && selectedPoliklinik) {
+              loadAvailableTimeSlots(selectedDoctor, selectedPoliklinik, selectedDate);
             }
+            updateSubmitButton();
           });
         });
       }
       
-      // Saat slotlarını render et
       function renderTimeSlots(slots) {
         const container = document.getElementById('timeSlotsContainer');
+        if (!container) return;
+
         container.innerHTML = '';
 
-        if (!slots || slots.length === 0) {
+        if (!slots?.length) {
           container.innerHTML = '<div class="alert alert-warning">Seçilen tarih için müsait saat bulunamadı</div>';
+          selectedTime = null;
+          updateSubmitButton();
           return;
         }
 
@@ -412,6 +460,7 @@
               this.classList.add('selected', 'btn-primary');
               this.classList.remove('btn-outline-primary');
               selectedTime = slot.time;
+              updateSubmitButton();
             });
           }
 
@@ -419,35 +468,42 @@
         });
       }
       
-      // Mesaj göster
       function showMessage(content, type) {
         const messageElement = document.getElementById('message');
-        messageElement.innerHTML = typeof content === 'string' 
-          ? `<div class="alert alert-${type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'success'}">${content}</div>`
-          : content;
+        if (!messageElement) return;
+
+        const alertClass = type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'success';
+        messageElement.innerHTML = `
+          <div class="alert alert-${alertClass}">
+            ${content}
+          </div>
+        `;
 
         setTimeout(() => {
-          if (messageElement.innerHTML === content || messageElement.innerHTML.includes(content)) {
+          if (messageElement.innerHTML.includes(content)) {
             messageElement.innerHTML = '';
           }
         }, 5000);
       }
       
-      // Loading durumunu ayarla
       function toggleLoading(show) {
-        const spinner = document.getElementById('loadingSpinner');
-        const submitText = document.getElementById('submitText');
+        const submitTextElement = document.getElementById('submitText');
+        const loadingSpinnerElement = document.getElementById('loadingSpinner');
+        
+        if (!submitTextElement || !loadingSpinnerElement) {
+          console.error('Yükleniyor animasyonu için gerekli elementler bulunamadı');
+          return;
+        }
 
         if (show) {
-          spinner.style.display = 'inline-block';
-          submitText.textContent = 'İşleniyor...';
+          loadingSpinnerElement.style.display = 'inline-block';
+          submitTextElement.textContent = 'İşleniyor...';
         } else {
-          spinner.style.display = 'none';
-          submitText.textContent = 'Randevu Oluştur';
+          loadingSpinnerElement.style.display = 'none';
+          submitTextElement.textContent = 'Randevu Oluştur';
         }
       }
       
-      // Seçimleri sıfırla
       function resetSelection() {
         selectedDoctor = null;
         selectedTime = null;
@@ -456,33 +512,77 @@
           s.classList.remove('selected', 'btn-primary');
           s.classList.add('btn-outline-primary');
         });
-        document.getElementById('timeSlotsContainer').innerHTML = '<p class="text-muted">Önce doktor ve tarih seçiniz</p>';
+        const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+        if (timeSlotsContainer) {
+          timeSlotsContainer.innerHTML = '<p class="text-muted">Önce doktor ve tarih seçiniz</p>';
+        }
+        updateSubmitButton();
       }
       
-      // TC Kimlik No validation
-      document.getElementById('tc').addEventListener('input', function() {
-        this.value = this.value.replace(/[^0-9]/g, '');
-        if (this.value.length > 11) {
-          this.value = this.value.slice(0, 11);
-        }
-        if (this.value.length === 11 && !validateTC(this.value)) {
-          this.classList.add('is-invalid');
-          this.nextElementSibling.textContent = 'Geçersiz TC Kimlik No';
-        } else {
-          validateField(this);
-        }
-      });
+      // TC Kimlik No validasyonu
+      const tcInput = document.getElementById('tc');
+      if (tcInput) {
+        tcInput.addEventListener('input', function() {
+          this.value = this.value.replace(/[^0-9]/g, '');
+          if (this.value.length > 11) this.value = this.value.slice(0, 11);
+          const parentContainer = this.closest('.col-md-6');
+          const feedback = parentContainer?.querySelector('.invalid-feedback');
+          const validFeedback = parentContainer?.querySelector('.valid-feedback');
+          if (!feedback || !validFeedback) {
+            console.error('Feedback elementleri bulunamadı');
+            return;
+          }
+          if (this.value.length === 11) {
+            this.classList.remove('is-invalid');
+            this.classList.add('is-valid');
+            feedback.textContent = '';
+            validFeedback.textContent = 'TC Kimlik No geçerli!';
+          } else {
+            this.classList.remove('is-valid');
+            this.classList.add('is-invalid');
+            feedback.textContent = `Lütfen 11 haneli TC Kimlik Numarası giriniz (${this.value.length}/11).`;
+            validFeedback.textContent = '';
+          }
+        });
+      }
       
-      // Telefon numarası validation
-      document.getElementById('tel').addEventListener('input', function() {
-        this.value = this.value.replace(/[^0-9]/g, '');
-        if (this.value.length > 10) {
-          this.value = this.value.slice(0, 10);
-        }
-        validateField(this);
-      });
+      // Telefon validasyonu
+     const telInput = document.getElementById('tel');
+
+      if (telInput) {
+           telInput.addEventListener('input', function () {
+          // Sadece rakamları al
+          this.value = this.value.replace(/[^0-9]/g, '');
+
+          // Maksimum 10 karakterle sınırla
+          if (this.value.length > 10) this.value = this.value.slice(0, 10);
+
+          // Geri bildirim elementlerini bul
+          const parentContainer = this.closest('.col-md-6');
+          const feedback = parentContainer?.querySelector('.invalid-feedback');
+          const validFeedback = parentContainer?.querySelector('.valid-feedback');
+
+          if (!feedback || !validFeedback) {
+            console.error('Telefon feedback elementleri bulunamadı');
+            return;
+    }
+
+    // 5 ile başlayan 10 haneli kontrolü
+    if (/^5\d{9}$/.test(this.value)) {
+      this.classList.remove('is-invalid');
+      this.classList.add('is-valid');
+      feedback.textContent = '';
+      validFeedback.textContent = 'Telefon numarası geçerli!';
+    } else {
+      this.classList.remove('is-valid');
+      this.classList.add('is-invalid');
+      feedback.textContent = `Telefon numarası 5 ile başlamalı ve 10 haneli olmalıdır. (${this.value.length}/10)`;
+      validFeedback.textContent = '';
+    }
+  });
+}
+
       
-      // Alan validasyonu
       function validateField(field) {
         if (field.checkValidity()) {
           field.classList.remove('is-invalid');
@@ -493,188 +593,290 @@
         }
       }
       
-      // Hastane değiştiğinde
-      document.getElementById('hastane').addEventListener('change', async function() {
-        const hastaneId = this.value;
-        const poliklinikSelect = document.getElementById('poliklinik');
+      // Hastane değişim eventi
+      const hastaneSelect = document.getElementById('hastane');
+      if (hastaneSelect) {
+        hastaneSelect.addEventListener('change', async function() {
+          const hastaneId = this.value;
+          const poliklinikSelect = document.getElementById('poliklinik');
 
-        document.getElementById('doctorContainer').innerHTML = '<p class="text-muted">Önce hastane ve poliklinik seçiniz</p>';
-        resetSelection();
-
-        if (!hastaneId) {
-          poliklinikSelect.innerHTML = '<option value="">Önce hastane seçiniz</option>';
-          poliklinikSelect.disabled = true;
-          document.getElementById('poliklinik-list').innerHTML = '';
-          return;
-        }
-
-        try {
-          poliklinikSelect.disabled = true;
-          poliklinikSelect.innerHTML = '<option value="">Yükleniyor...</option>';
-          await loadPolyclinics(hastaneId);
-        } catch (error) {
-          console.error('Hastane değişim hatası:', error);
-          poliklinikSelect.innerHTML = '<option value="">Poliklinikler yüklenemedi</option>';
-          poliklinikSelect.disabled = true;
-        }
-      });
-      
-      // Poliklinik değiştiğinde
-      document.getElementById('poliklinik').addEventListener('change', async function() {
-        const hastaneId = document.getElementById('hastane').value;
-        const poliklinikId = this.value;
-
-        resetSelection();
-
-        if (!hastaneId || !poliklinikId) {
-          document.getElementById('doctorContainer').innerHTML = '<p class="text-muted">Önce hastane ve poliklinik seçiniz</p>';
-          return;
-        }
-
-        try {
-          const container = document.getElementById('doctorContainer');
-          container.innerHTML = '<p class="text-muted loading-placeholder">Doktorlar yükleniyor</p>';
-
-          const doctors = await loadDoctors(hastaneId, poliklinikId);
-          renderDoctors(doctors);
-        } catch (error) {
-          console.error('Poliklinik değişim hatası:', error);
-          document.getElementById('doctorContainer').innerHTML = '<p class="text-danger">Doktorlar yüklenemedi</p>';
-        }
-      });
-      
-      // Tarih değiştiğinde
-      document.getElementById('tarih').addEventListener('change', function() {
-        if (selectedDoctor && this.value) {
-          loadAvailableTimeSlots(selectedDoctor, this.value);
-        } else {
-          document.getElementById('timeSlotsContainer').innerHTML = '<p class="text-muted">Önce doktor seçiniz</p>';
-        }
-      });
-      
-      // Form gönderimi
-      const form = document.getElementById('randevuForm');
-      form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (!form.checkValidity()) {
-          form.classList.add('was-validated');
-          showMessage('Lütfen tüm zorunlu alanları doldurunuz.', 'error');
-          return;
-        }
-
-        if (!selectedDoctor) {
-          showMessage('Lütfen bir doktor seçiniz.', 'error');
-          return;
-        }
-
-        if (!selectedTime) {
-          showMessage('Lütfen bir saat seçiniz.', 'error');
-          return;
-        }
-
-        toggleLoading(true);
-
-        try {
-          const [year, month, day] = document.getElementById('tarih').value.split('-');
-          const [hours, minutes] = selectedTime.split(':');
-          const appointmentDate = new Date(year, month - 1, day, hours, minutes);
-
-          const hastaData = {
-            TC: document.getElementById('tc').value,
-            Ad: document.getElementById('ad').value.trim(),
-            Soyad: document.getElementById('soyad').value.trim(),
-            Cinsiyet: document.getElementById('cinsiyet').value,
-            DogumTarihi: document.getElementById('dogumTarihi').value,
-            TelNo: document.getElementById('tel').value
-          };
-
-          // Hasta verilerini logla
-          console.log('Gönderilen hasta verileri:', hastaData);
-
-          // Hasta kaydetme
-          const hastaResponse = await fetch(`${apiBaseUrl}/api/hasta`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(hastaData)
-          });
-
-          const hastaResponseData = await hastaResponse.json();
-          if (!hastaResponse.ok) {
-            console.error('Hasta kaydetme hatası:', hastaResponseData);
-            throw new Error(hastaResponseData.error || 'Hasta bilgileri kaydedilemedi');
+          const doctorContainer = document.getElementById('doctorContainer');
+          if (doctorContainer) {
+            doctorContainer.innerHTML = '<p class="text-muted">Önce hastane ve poliklinik seçiniz</p>';
           }
-
-          // Hasta kaydedildiğini logla
-          console.log('Hasta kaydedildi:', hastaResponseData);
-
-          // Randevu oluşturma
-          const randevuData = {
-            tc: hastaData.TC,
-            doktorId: parseInt(selectedDoctor, 10), // Tamsayı olarak gönder
-            tarih: appointmentDate.toISOString()
-          };
-
-          // Randevu verilerini logla
-          console.log('Gönderilen randevu verileri:', randevuData);
-
-          const response = await fetch(`${apiBaseUrl}/api/randevu`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(randevuData)
-          });
-
-          const data = await response.json();
-
-          if (!response.ok) {
-            console.error('Randevu oluşturma hatası:', data);
-            throw new Error(data.error || 'Randevu oluşturulamadı', { cause: data.details });
-          }
-
-          const successMessage = `
-            <div class="alert alert-success">
-              <h5 class="alert-heading">Randevu Başarıyla Oluşturuldu!</h5>
-              <hr>
-              <p><strong>Randevu No:</strong> ${data.randevuId}</p>
-              <p><strong>Hasta:</strong> ${hastaData.Ad} ${hastaData.Soyad}</p>
-              <p><strong>Doktor:</strong> ${document.querySelector('.doctor-card.selected .card-title').textContent}</p>
-              <p><strong>Poliklinik:</strong> ${document.getElementById('poliklinik').selectedOptions[0].textContent}</p>
-              <p><strong>Tarih:</strong> ${appointmentDate.toLocaleString('tr-TR', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })}</p>
-            </div>
-          `;
-
-          showMessage(successMessage, 'success');
-          form.reset();
           resetSelection();
-          document.getElementById('hastane').value = '';
-          document.getElementById('poliklinik').innerHTML = '<option value="">Önce hastane seçiniz</option>';
-          document.getElementById('poliklinik').disabled = true;
-          document.getElementById('poliklinik-list').innerHTML = '';
-        } catch (error) {
-          console.error('Hata:', error.message, error.cause, error.stack);
-          showMessage(`
-            <div class="alert alert-danger">
-              <h5 class="alert-heading">Hata!</h5>
-              <hr>
-              <p>${error.message}</p>
-              ${error.cause ? `<p class="mb-0"><small>Detay: ${error.cause}</small></p>` : ''}
-            </div>
-          `, 'error');
-        } finally {
-          toggleLoading(false);
-          form.classList.remove('was-validated');
-        }
-      });
+          selectedPoliklinik = null;
+
+          if (!hastaneId) {
+            if (poliklinikSelect) {
+              poliklinikSelect.innerHTML = '<option value="">Önce hastane seçiniz</option>';
+              poliklinikSelect.disabled = true;
+            }
+            return;
+          }
+
+          try {
+            if (poliklinikSelect) {
+              poliklinikSelect.disabled = true;
+              poliklinikSelect.innerHTML = '<option value="">Yükleniyor...</option>';
+            }
+            await loadPolyclinics(hastaneId);
+          } catch (error) {
+            console.error('Hastane değişim hatası:', error);
+            if (poliklinikSelect) {
+              poliklinikSelect.innerHTML = '<option value="">Poliklinikler yüklenemedi</option>';
+              poliklinikSelect.disabled = true;
+            }
+          }
+        });
+      }
       
-      // Sayfa yüklendiğinde hastaneleri yükle
+      // Poliklinik değişim eventi
+      const poliklinikSelect = document.getElementById('poliklinik');
+      if (poliklinikSelect) {
+        poliklinikSelect.addEventListener('change', async function() {
+          const hastaneId = document.getElementById('hastane')?.value;
+          const poliklinikId = this.value;
+          selectedPoliklinik = poliklinikId;
+
+          resetSelection();
+
+          if (!hastaneId || !poliklinikId) {
+            const doctorContainer = document.getElementById('doctorContainer');
+            if (doctorContainer) {
+              doctorContainer.innerHTML = '<p class="text-muted">Önce hastane ve poliklinik seçiniz</p>';
+            }
+            return;
+          }
+
+          try {
+            const container = document.getElementById('doctorContainer');
+            if (container) {
+              container.innerHTML = '<p class="text-muted loading-placeholder">Doktorlar yükleniyor</p>';
+            }
+            const doctors = await loadDoctors(hastaneId, poliklinikId);
+            renderDoctors(doctors);
+          } catch (error) {
+            console.error('Poliklinik değişim hatası:', error);
+            const container = document.getElementById('doctorContainer');
+            if (container) {
+              container.innerHTML = '<p class="text-danger">Doktorlar yüklenemedi</p>';
+            }
+          }
+        });
+      }
+      
+      // Tarih değişim eventi
+      const tarihInput = document.getElementById('tarih');
+      if (tarihInput) {
+        tarihInput.addEventListener('change', function() {
+          const poliklinikId = document.getElementById('poliklinik').value;
+          if (selectedDoctor && this.value && poliklinikId) {
+            loadAvailableTimeSlots(selectedDoctor, poliklinikId, this.value);
+          } else {
+            const container = document.getElementById('timeSlotsContainer');
+            if (container) {
+              container.innerHTML = '<p class="text-muted">Önce doktor ve poliklinik seçiniz</p>';
+            }
+          }
+          updateSubmitButton();
+        });
+      }
+      
+      // Form submit eventi
+      const form = document.getElementById('randevuForm');
+      if (form) {
+        form.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            showMessage('Lütfen tüm zorunlu alanları doldurunuz.', 'error');
+            return;
+          }
+
+          if (!selectedDoctor) {
+            showMessage('Lütfen bir doktor seçiniz.', 'error');
+            return;
+          }
+
+          if (!selectedPoliklinik) {
+            showMessage('Lütfen bir poliklinik seçiniz.', 'error');
+            return;
+          }
+
+          if (!selectedTime) {
+            showMessage('Lütfen bir saat seçiniz.', 'error');
+            return;
+          }
+
+          const tarih = document.getElementById('tarih').value;
+          if (!tarih) {
+            showMessage('Lütfen bir tarih seçiniz.', 'error');
+            return;
+          }
+
+          toggleLoading(true);
+
+          try {
+            const [year, month, day] = tarih.split('-');
+            const [hours, minutes] = selectedTime.split(':');
+            const tHours = Number(hours)+3;
+            const appointmentDate = new Date(year, month - 1, day, tHours, minutes);
+             const appointmentDateToShow = new Date(year, month - 1, day, hours, minutes);
+
+            const hastaData = {
+              TC: document.getElementById('tc').value.trim(),
+              Ad: document.getElementById('ad').value.trim(),
+              Soyad: document.getElementById('soyad').value.trim(),
+              DogumTarihi: document.getElementById('dogumTarihi').value,
+              Cinsiyet: document.getElementById('cinsiyet').value,
+              TelNo: document.getElementById('tel').value.trim()
+            };
+
+            // Tüm alanların dolu olduğunu kontrol et
+            console.log('Hasta verileri:', JSON.stringify(hastaData, null, 2));
+            const requiredFields = ['TC', 'Ad', 'Soyad', 'DogumTarihi', 'Cinsiyet', 'TelNo'];
+            const missingFields = requiredFields.filter(field => !hastaData[field] || hastaData[field].trim() === '');
+            if (missingFields.length > 0) {
+              showMessage(`Eksik alanlar: ${missingFields.join(', ')}`, 'error');
+              throw new Error(`Eksik alanlar: ${missingFields.join(', ')}`);
+            }
+
+            // TC Kimlik No doğrulama
+            console.log('TC Kimlik No kontrol ediliyor:', hastaData.TC);
+            if (!validateTC(hastaData.TC)) {
+              console.log('Geçersiz TC Kimlik No:', hastaData.TC);
+              showMessage('Lütfen 11 haneli bir TC Kimlik Numarası giriniz.', 'error');
+              throw new Error('Geçersiz TC Kimlik No');
+            }
+            console.log('TC Kimlik No geçerli:', hastaData.TC);
+
+            // Telefon numarası format kontrolü (5 ile başlamalı ve 10 haneli olmalı)
+            if (!/^5\d{9}$/.test(hastaData.TelNo)) {
+              showMessage('Telefon numarası 5 ile başlamalı ve 10 haneli olmalıdır.', 'error');
+              throw new Error('Geçersiz telefon numarası');
+            }
+
+
+            // Doğum tarihi format kontrolü
+            const dogumTarihi = new Date(hastaData.DogumTarihi);
+            if (isNaN(dogumTarihi.getTime()) || dogumTarihi > new Date()) {
+              showMessage('Geçersiz veya gelecekteki bir doğum tarihi.', 'error');
+              throw new Error('Geçersiz doğum tarihi');
+            }
+
+            // Cinsiyet kontrolü
+            if (!['E', 'K'].includes(hastaData.Cinsiyet)) {
+              showMessage('Lütfen geçerli bir cinsiyet seçiniz (Erkek/Kadın).', 'error');
+              throw new Error('Geçersiz cinsiyet');
+            }
+
+            console.log('Gönderilen hasta verileri:', JSON.stringify(hastaData, null, 2));
+
+            // Hasta kaydı
+            const hastaResponse = await fetch(`${apiBaseUrl}/api/hasta`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(hastaData)
+            });
+
+            let errorDetails = '';
+            const hastaResponseData = await hastaResponse.json().catch(err => {
+              console.error('Hasta yanıtını ayrıştırma hatası:', err);
+              return { error: 'Sunucudan geçersiz yanıt alındı', details: err.message };
+            });
+
+            if (!hastaResponse.ok) {
+              errorDetails = hastaResponseData.error || hastaResponseData.details || JSON.stringify(hastaResponseData) || 'Bilinmeyen hata';
+              console.error('Hasta kaydetme hatası:', JSON.stringify(hastaResponseData, null, 2), 'HTTP Status:', hastaResponse.status);
+              throw new Error('Hasta eklenirken bir hata oluştu', { cause: errorDetails });
+            }
+
+            console.log('Hasta kaydedildi:', hastaResponseData);
+
+            // Randevu kaydı
+            const randevuData = {
+              tc: hastaData.TC,
+              doktorId: parseInt(selectedDoctor, 10),
+              poliklinikId: parseInt(selectedPoliklinik, 10),
+              tarih: appointmentDate.toISOString()
+            };
+
+            console.log('Gönderilen randevu verileri:', JSON.stringify(randevuData, null, 2));
+
+            const response = await fetch(`${apiBaseUrl}/api/randevu`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(randevuData)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+              console.error('Randevu oluşturma hatası:', data);
+              throw new Error(data.error || 'Randevu oluşturulamadı', { cause: data.details });
+            }
+
+            const selectedDoctorElement = document.querySelector('.doctor-card.selected .card-title');
+            const selectedPoliklinikElement = document.getElementById('poliklinik');
+
+            const successMessage = `
+              <div class="alert alert-success">
+                <h5 class="alert-heading">Randevu Başarıyla Oluşturuldu!</h5>
+                <hr>
+                <p><strong>Randevu No:</strong> ${data.randevuId}</p>
+                <p><strong>Hasta:</strong> ${hastaData.Ad} ${hastaData.Soyad}</p>
+                <p><strong>Doktor:</strong> ${selectedDoctorElement?.textContent || 'Bilinmiyor'}</p>
+                <p><strong>Poliklinik:</strong> ${selectedPoliklinikElement?.selectedOptions[0]?.textContent || 'Bilinmiyor'}</p>
+                <p><strong>Tarih:</strong> ${appointmentDateToShow.toLocaleString('tr-TR', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}</p>
+              </div>
+            `;
+
+            showMessage(successMessage, 'success');
+            form.reset();
+            form.classList.remove('was-validated');
+            resetSelection();
+            
+            const hastaneSelect = document.getElementById('hastane');
+            if (hastaneSelect) {
+              hastaneSelect.value = '';
+            }
+            
+            const poliklinikSelect = document.getElementById('poliklinik');
+            if (poliklinikSelect) {
+              poliklinikSelect.innerHTML = '<option value="">Önce hastane seçiniz</option>';
+              poliklinikSelect.disabled = true;
+            }
+            selectedPoliklinik = null;
+          } catch (error) {
+            console.error('Hata:', error.message, error.cause, error.stack);
+            const errorMessage = error.cause ? 
+              `Hata: ${error.message}. Detay: ${error.cause}` :
+              `Hata: ${error.message}`;
+            showMessage(`
+              <div class="alert alert-danger">
+                <h5 class="alert-heading">Hata!</h5>
+                <hr>
+                <p>${errorMessage}</p>
+              </div>
+            `, 'error');
+          } finally {
+            toggleLoading(false);
+          }
+        });
+      }
+      
+      
+      // Uygulama başlangıcında hastaneleri yükle
       loadHospitals();
     });
   </script>

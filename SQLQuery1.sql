@@ -1,4 +1,4 @@
--- VARSA VERÝTABANINI SÝL
+-- VARSA VERÄ°TABANINI SÄ°L
 USE master;
 GO
 
@@ -9,15 +9,15 @@ BEGIN
 END
 GO
 
--- VERÝTABANI OLUÞTUR
+-- VERÄ°TABANI OLUÅžTUR
 CREATE DATABASE Hastane;
 GO
 
--- VERÝTABANINI KULLAN
+-- VERÄ°TABANINI KULLAN
 USE Hastane;
 GO
 
--- Adres Tablosu (Önce oluþturulmalý çünkü diðer tablolar buna referans veriyor)
+-- Adres Tablosu (Ã–nce oluÅŸturulmalÄ± Ã§Ã¼nkÃ¼ diÄŸer tablolar buna referans veriyor)
 CREATE TABLE Adres (
     Adres_ID INT PRIMARY KEY IDENTITY(1,1),
     Sehir VARCHAR(50),
@@ -45,7 +45,7 @@ CREATE TABLE Poliklinik (
 );
 GO
 
--- Hastane_Poliklinik Ýliþki Tablosu
+-- Hastane_Poliklinik Ä°liÅŸki Tablosu
 CREATE TABLE Hastane_Poliklinik (
     HastaneID INT,
     PID INT,
@@ -63,7 +63,7 @@ CREATE TABLE Doktor (
 );
 GO
 
--- Branþ Tablosu
+-- BranÅŸ Tablosu
 CREATE TABLE Brans (
     SicilNo INT PRIMARY KEY,
     Brans VARCHAR(50),
@@ -71,7 +71,7 @@ CREATE TABLE Brans (
 );
 GO
 
--- Hastane_Poliklinik_Doktor Ýliþki Tablosu
+-- Hastane_Poliklinik_Doktor Ä°liÅŸki Tablosu
 CREATE TABLE Hastane_Poliklinik_Doktor (
     HastaneID INT,
     PID INT,
@@ -124,7 +124,7 @@ CREATE TABLE Ceza (
 );
 GO
 
--- Hasta Bazlý Randevu bilgilerini Getirme Stored Procedure
+-- Hasta BazlÄ± Randevu bilgilerini Getirme Stored Procedure
 CREATE PROCEDURE GetAllRandevuBilgileri
     @TC CHAR(11)
 AS
@@ -141,7 +141,7 @@ BEGIN
 END;
 GO
 
--- Randevu Kurallarý Trigger'ý
+-- Randevu KurallarÄ± Trigger'Ä±
 CREATE OR ALTER TRIGGER trg_RandevuKurallari
 ON Randevu
 INSTEAD OF INSERT
@@ -152,7 +152,7 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
-        -- 1. Randevu saat kontrolü (07:00-17:00 arasý ve :00 veya :30 dakikalarýnda)
+        -- 1. Randevu saat kontrolÃ¼ (07:00-17:00 arasÄ± ve :00 veya :30 dakikalarÄ±nda)
         IF EXISTS (
             SELECT 1
             FROM inserted
@@ -162,24 +162,24 @@ BEGIN
                 DATEPART(MINUTE, R_Tarih) NOT IN (0, 30)
         )
         BEGIN
-            RAISERROR('Randevular 07:00-17:00 arasýnda ve 00 veya 30 dakikalarýnda olmalýdýr.', 16, 1);
+            RAISERROR('Randevular 07:00-17:00 arasÄ±nda ve 00 veya 30 dakikalarÄ±nda olmalÄ±dÄ±r.', 16, 1);
             ROLLBACK TRANSACTION;
             RETURN;
         END
 
-        -- 2. Ayný hasta için ayný saatte çakýþan randevu kontrolü
+        -- 2. AynÄ± hasta iÃ§in aynÄ± saatte Ã§akÄ±ÅŸan randevu kontrolÃ¼
         IF EXISTS (
             SELECT 1
             FROM inserted i
             JOIN Randevu r ON i.TC = r.TC AND i.R_Tarih = r.R_Tarih
         )
         BEGIN
-            RAISERROR('Bu hasta için zaten bu saatte bir randevu bulunmaktadýr.', 16, 1);
+            RAISERROR('Bu hasta iÃ§in zaten bu saatte bir randevu bulunmaktadÄ±r.', 16, 1);
             ROLLBACK TRANSACTION;
             RETURN;
         END
 
-        -- 3. Doktorun ayný poliklinikte ayný saatte müsaitlik kontrolü
+        -- 3. Doktorun aynÄ± poliklinikte aynÄ± saatte mÃ¼saitlik kontrolÃ¼
         IF EXISTS (
             SELECT 1
             FROM inserted i
@@ -194,31 +194,31 @@ BEGIN
             RETURN;
         END
 
-        -- 4. Geçmiþ tarihli randevu kontrolü
+        -- 4. GeÃ§miÅŸ tarihli randevu kontrolÃ¼
         IF EXISTS (
             SELECT 1
             FROM inserted
             WHERE R_Tarih < GETDATE()
         )
         BEGIN
-            RAISERROR('Geçmiþ tarihe randevu oluþturulamaz.', 16, 1);
+            RAISERROR('GeÃ§miÅŸ tarihe randevu oluÅŸturulamaz.', 16, 1);
             ROLLBACK TRANSACTION;
             RETURN;
         END
 
-        -- 5. 1.5 yýldan fazla ileri tarih kontrolü
+        -- 5. 1.5 yÄ±ldan fazla ileri tarih kontrolÃ¼
         IF EXISTS (
             SELECT 1
             FROM inserted
             WHERE R_Tarih > DATEADD(MONTH, 18, GETDATE())
         )
         BEGIN
-            RAISERROR('Randevular en fazla 1.5 yýl sonrasýna oluþturulabilir.', 16, 1);
+            RAISERROR('Randevular en fazla 1.5 yÄ±l sonrasÄ±na oluÅŸturulabilir.', 16, 1);
             ROLLBACK TRANSACTION;
             RETURN;
         END
 
-        -- Ekleme iþlemi
+        -- Ekleme iÅŸlemi
         INSERT INTO Randevu (RID, R_Tarih, TC, SicilNo, PID)
         SELECT RID, R_Tarih, TC, SicilNo, PID
         FROM inserted;
@@ -239,34 +239,34 @@ END;
 GO
 
 
--- ÖRNEK VERÝLERÝ EKLEME
+-- Ã–RNEK VERÄ°LERÄ° EKLEME
 
 -- Adres ekle
 INSERT INTO Adres (Sehir, Ilce, Cadde, Sokak, ANo) VALUES 
-('Ýstanbul', 'Beþiktaþ', 'Baðdat Cad.', 'Çýnar Sok.', '15'),
-('Ankara', 'Çankaya', 'Atatürk Bulv.', 'Çiçek Sok.', '10'),
-('Ýzmir', 'Bornova', 'Cumhuriyet Cd.', 'Gül Sok.', '22'),
-('Bursa', 'Nilüfer', 'Ýstiklal Cd.', 'Lale Sok.', '5');
+('Ä°stanbul', 'BeÅŸiktaÅŸ', 'BaÄŸdat Cad.', 'Ã‡Ä±nar Sok.', '15'),
+('Ankara', 'Ã‡ankaya', 'AtatÃ¼rk Bulv.', 'Ã‡iÃ§ek Sok.', '10'),
+('Ä°zmir', 'Bornova', 'Cumhuriyet Cd.', 'GÃ¼l Sok.', '22'),
+('Bursa', 'NilÃ¼fer', 'Ä°stiklal Cd.', 'Lale Sok.', '5');
 GO
 
 -- Hastane ekle
 INSERT INTO Hastane VALUES 
-(1, '02123456789', 'Özel Saðlýk Hastanesi', 1),
-(2, '02123334455', 'Þehir Hastanesi', 2),
-(3, '02462223344', 'Ege Týp Merkezi', 3),
-(4, '03262221100', 'Nilüfer Hastanesi', 4);
+(1, '02123456789', 'Ã–zel SaÄŸlÄ±k Hastanesi', 1),
+(2, '02123334455', 'Åžehir Hastanesi', 2),
+(3, '02462223344', 'Ege TÄ±p Merkezi', 3),
+(4, '03262221100', 'NilÃ¼fer Hastanesi', 4);
 GO
 
 -- Poliklinik ekle
 INSERT INTO Poliklinik VALUES 
 (101, 'Kardiyoloji'),
 (201, 'Ortopedi'),
-(202, 'Çocuk Cerrahisi'),
-(203, 'Kadýn Doðum'),
-(204, 'Göz Hastalýklarý');
+(202, 'Ã‡ocuk Cerrahisi'),
+(203, 'KadÄ±n DoÄŸum'),
+(204, 'GÃ¶z HastalÄ±klarÄ±');
 GO
 
--- Hastane_Poliklinik iliþkileri
+-- Hastane_Poliklinik iliÅŸkileri
 INSERT INTO Hastane_Poliklinik VALUES
 (1, 101),
 (2, 201),
@@ -277,23 +277,23 @@ GO
 
 -- Doktor ekle
 INSERT INTO Doktor VALUES 
-(5001, 'Sýla', 'Kasalý'),
+(5001, 'SÄ±la', 'KasalÄ±'),
 (6001, 'Mehmet', 'Demir'),
-(6002, 'Ayþe', 'Kara'),
-(7001, 'Elif', 'Yýlmaz'),
-(8001, 'Mustafa', 'Çelik');
+(6002, 'AyÅŸe', 'Kara'),
+(7001, 'Elif', 'YÄ±lmaz'),
+(8001, 'Mustafa', 'Ã‡elik');
 GO
 
--- Branþ ekle
+-- BranÅŸ ekle
 INSERT INTO Brans VALUES
-(5001, 'Kalp Hastalýklarý'),
+(5001, 'Kalp HastalÄ±klarÄ±'),
 (6001, 'Ortopedi'),
-(6002, 'Çocuk Cerrahisi'),
-(7001, 'Kadýn Doðum'),
-(8001, 'Göz Hastalýklarý');
+(6002, 'Ã‡ocuk Cerrahisi'),
+(7001, 'KadÄ±n DoÄŸum'),
+(8001, 'GÃ¶z HastalÄ±klarÄ±');
 GO
 
--- Hastane_Poliklinik_Doktor iliþkileri
+-- Hastane_Poliklinik_Doktor iliÅŸkileri
 INSERT INTO Hastane_Poliklinik_Doktor VALUES
 (1, 101, 5001),
 (2, 201, 6001),
@@ -304,14 +304,14 @@ GO
 
 -- Hasta ekle
 INSERT INTO Hasta VALUES 
-('12345678901', 'Ahmet', 'Yýlmaz', 'E', '1990-05-15'),
+('12345678901', 'Ahmet', 'YÄ±lmaz', 'E', '1990-05-15'),
 ('11122233344', 'Ali', 'Vural', 'E', '1995-08-22'),
-('22233344455', 'Fatma', 'Öztürk', 'K', '1983-03-10'),
+('22233344455', 'Fatma', 'Ã–ztÃ¼rk', 'K', '1983-03-10'),
 ('33344455566', 'Burak', 'Aslan', 'E', '1989-11-28'),
 ('44455566677', 'Gamze', 'Polat', 'K', '1974-07-03');
 GO
 
--- Hasta telefon numaralarý
+-- Hasta telefon numaralarÄ±
 INSERT INTO Hasta_TEL VALUES
 ('12345678901', '05551234567'),
 ('11122233344', '05335557788'),
@@ -335,25 +335,25 @@ INSERT INTO Ceza VALUES
 (20004, '2025-05-12', DATEADD(DAY, 15, '2025-05-12'));
 GO
 
--- Stored Procedure'ü test etme
+-- Stored Procedure'Ã¼ test etme
 EXEC GetAllRandevuBilgileri @TC = '12345678901';
 GO
--- Hasta tablosunu göster
+-- Hasta tablosunu gÃ¶ster
 SELECT * FROM Hasta;
 
--- Doktor tablosunu göster
+-- Doktor tablosunu gÃ¶ster
 SELECT * FROM Doktor;
 
--- Klinik tablosunu göster
+-- Klinik tablosunu gÃ¶ster
 SELECT * FROM Poliklinik;
 
--- Randevu tablosunu göster
+-- Randevu tablosunu gÃ¶ster
 SELECT * FROM Randevu;
 
--- Ceza tablosunu göster
+-- Ceza tablosunu gÃ¶ster
 SELECT * FROM Ceza;
 
 SELECT * FROM Hasta WHERE TC = '10000000000';
 SELECT * FROM Randevu WHERE TC = '10000000000';
 EXEC GetAllRandevuBilgileri @TC = '10000000000';
-SELECT * FROM Hasta WHERE Ad = 'berat kaçar';
+SELECT * FROM Hasta WHERE Ad = 'berat kaÃ§ar';
